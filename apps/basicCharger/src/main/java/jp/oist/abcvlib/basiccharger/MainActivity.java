@@ -98,8 +98,10 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
     private StateX stateX = StateX.UNCENTERED;
     private StateY stateY = StateY.FAR_FROM_BOTTOM;
     private Action action = Action.APPROACH;
-    private boolean centeredPuck = false;
-    private boolean puckCloseToBottom = false;
+    private int centeredPuck = 0;
+    private int centeredPuckLimit = 10;
+    private int puckCloseToBottom = 0;
+    private int puckCloseToBottomLimit = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +144,11 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
         WheelData wheelData = new WheelData.Builder(this, publisherManager).build();
         wheelData.addSubscriber(this);
 
-        new ObjectDetectorData.Builder(this, publisherManager, this).setPreviewView(previewView).build().addSubscriber(this);
+        new ObjectDetectorData.Builder(this, publisherManager, this)
+                .setModel("model.tflite")
+                .setPreviewView(previewView)
+                .build()
+                .addSubscriber(this);
 
         setSerialCommManager(new SerialCommManager(usbSerial, batteryData, wheelData));
         super.onSerialReady(usbSerial);
@@ -249,17 +255,17 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
             float closeUpperThreshold = 0.2f;
 
             if (abs(errorX) < centeredLowerThreshold){
-                centeredPuck = true;
+                centeredPuck++;
             }else if (abs(errorX) > centeredUpperThreshold){
-                centeredPuck = false;
+                centeredPuck = 0;
             }
             if (abs(errorY) < closeLowerThreshold){
-                puckCloseToBottom = true;
+                puckCloseToBottom++;
             }else if (abs(errorY) > closeUpperThreshold){
-                puckCloseToBottom = false;
+                puckCloseToBottom = 0;
             }
 
-            if (centeredPuck && puckCloseToBottom) {
+            if (centeredPuck >= centeredPuckLimit && puckCloseToBottom >= puckCloseToBottomLimit) {
                 mount();
             }else{
                 approach(errorX, errorY);
@@ -274,8 +280,8 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
     private void searching(){
 //        action = Action.SEARCHING;
         Log.v("PUCK", "Action.SEARCHING");
-        speedL = 0.6f;
-        speedR = -0.6f;
+        speedL = 0.4f;
+        speedR = -0.4f;
     }
 
     private void approach(float errorX, float errorY){
