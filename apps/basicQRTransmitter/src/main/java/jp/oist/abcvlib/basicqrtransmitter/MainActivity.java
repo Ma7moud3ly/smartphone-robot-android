@@ -3,6 +3,7 @@ package jp.oist.abcvlib.basicqrtransmitter;
 import android.os.Bundle;
 import jp.oist.abcvlib.util.Logger;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import jp.oist.abcvlib.core.AbcvlibActivity;
@@ -64,6 +65,11 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
             }
         }
     };
+
+    @Override
+    protected List<String> getRequiredPermissions() {
+        return List.of(android.Manifest.permission.CAMERA);
+    }
 
     @Override
     public void onSerialReady(UsbSerial usbSerial) {
