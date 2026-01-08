@@ -125,6 +125,14 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
             overlayView.setPreviewDimensions(previewWidth, previewHeight);
         });
     }
+
+    @Override
+    protected List<String> getRequiredPermissions() {
+        return List.of(android.Manifest.permission.CAMERA,
+                android.Manifest.permission.RECORD_AUDIO
+        );
+    }
+
     @Override
     public void onSerialReady(UsbSerial usbSerial){
         /*

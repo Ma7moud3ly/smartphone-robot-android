@@ -2,6 +2,7 @@ package jp.oist.abcvlib.basicassembler;
 
 import android.os.Bundle;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import jp.oist.abcvlib.core.AbcvlibActivity;
@@ -66,6 +67,14 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
 
         // Passes Android App information up to parent classes for various usages. Do not modify
         super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    protected List<String> getRequiredPermissions() {
+        return List.of(android.Manifest.permission.CAMERA,
+                android.Manifest.permission.RECORD_AUDIO
+        );
     }
 
     @Override

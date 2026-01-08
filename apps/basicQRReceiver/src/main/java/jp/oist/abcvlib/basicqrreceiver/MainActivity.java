@@ -3,6 +3,8 @@ package jp.oist.abcvlib.basicqrreceiver;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.List;
+
 import jp.oist.abcvlib.core.AbcvlibActivity;
 import jp.oist.abcvlib.core.inputs.PublisherManager;
 import jp.oist.abcvlib.core.inputs.phone.QRCodeData;
@@ -42,6 +44,11 @@ public class MainActivity extends AbcvlibActivity implements SerialReadyListener
         setContentView(R.layout.activity_main);
 
         letterTextView = findViewById(R.id.letterTextView);
+    }
+
+    @Override
+    protected List<String> getRequiredPermissions() {
+        return List.of(android.Manifest.permission.CAMERA);
     }
 
     @Override

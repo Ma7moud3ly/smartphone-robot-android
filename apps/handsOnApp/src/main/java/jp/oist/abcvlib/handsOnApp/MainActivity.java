@@ -83,6 +83,11 @@ public class MainActivity extends AbcvlibActivity implements BatteryDataSubscrib
     }
 
     @Override
+    protected List<String> getRequiredPermissions() {
+        return List.of(android.Manifest.permission.CAMERA);
+    }
+
+    @Override
     public void onSerialReady(UsbSerial usbSerial) {
         publisherManager = new PublisherManager();
 
